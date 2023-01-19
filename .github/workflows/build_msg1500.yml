@@ -1,4 +1,4 @@
-name: Build MSG1500 Padavan-KVR image
+name: Build_MSG1500
 
 on: 
   workflow_dispatch:
@@ -59,35 +59,12 @@ jobs:
         mkdir -p toolchain-3.4.x
         wget $TOOLCHAIN_URL
         tar -xvf mipsel-linux-uclibc.tar.xz -C toolchain-3.4.x
-    - name: Set golang
-      run: |
-        cp -f bashScripts/go.sh $(pwd)
-        sudo chmod 777 ./go.sh
-        bash ./go.sh
     - name: Set busybox's version to compile
       run: |
         cd $WORK_PATH/trunk/user/busybox
         sed -i "s/SRC_NAME=busybox.*/SRC_NAME=busybox-${{ github.event.inputs.busyboxver }}/g" ./Makefile
         cd $WORK_PATH/trunk
         sed -i "s/busybox_id=.*/busybox_id=\"${{ github.event.inputs.busyboxver }}\"/g" ./build_firmware_modify
-    - name: Recovery SSP bin files download from remote
-      if: github.event.inputs.ssp == 'true'
-      run: |
-        cp -f ssp/shadowsocks.sh $WORK_PATH/trunk/user/shadowsocks/scripts
-        #cp -f ssp/defaults.c $WORK_PATH/trunk/user/shared
-        #cp -f ssp/variables.c $WORK_PATH//trunk/user/httpd
-        cp -f ssp/Shadowsocks.asp $WORK_PATH/trunk/user/www/n56u_ribbon_fixed
-        cd $WORK_PATH/trunk/user/shared
-        #sed -i "s#https://cdn.jsdelivr.net/gh/Padavan_CI/ssp/trojan#https://cdn.jsdelivr.net/gh/${{ github.repository_owner }}/Padavan_CI/ssp/trojan#g" ./defaults.c
-        #sed -i "s#https://cdn.jsdelivr.net/gh/Padavan_CI/ssp/v2ray#https://cdn.jsdelivr.net/gh/${{ github.repository_owner }}/Padavan_CI/ssp/v2ray#g" ./defaults.c
-    - name: Update latest adg
-      run: |
-        cp -f adg/adguardhome.sh $WORK_PATH/trunk/user/adguardhome
-        #cp -f adg/defaults.c $WORK_PATH/trunk/user/shared
-        #cp -f adg/variables.c $WORK_PATH//trunk/user/httpd
-        cp -f adg/Advanced_adguardhome.asp $WORK_PATH/trunk/user/www/n56u_ribbon_fixed
-        #cd $WORK_PATH/trunk/user/adguardhome
-        #sed -i "s#https://cdn.jsdelivr.net/gh/chongshengB/rt-n56u/trunk/user/adguardhome/AdGuardHome#https://cdn.jsdelivr.net/gh/${{ github.repository_owner }}/Padavan_CI/adg/AdGuardHome#g" ./adguardhome.sh
     - name: Custom config
       run: |
         cd $WORK_PATH/trunk
@@ -159,18 +136,18 @@ jobs:
         echo "CONFIG_FIRMWARE_INCLUDE_ADBYBY=y" >> .config #adbyby plus+
         echo "CONFIG_FIRMWARE_INCLUDE_KOOLPROXY=y" >> .config #KP广告过滤
         #
-        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=n" >> .config #smartdns
-        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNSBIN=n" >> .config #smartdns二进制文件
+        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNS=y" >> .config #smartdns
+        echo "CONFIG_FIRMWARE_INCLUDE_SMARTDNSBIN=y" >> .config #smartdns二进制文件
         echo "CONFIG_FIRMWARE_INCLUDE_ADGUARDHOME=y" >> .config
         #
         echo "CONFIG_FIRMWARE_INCLUDE_ALIDDNS=y" >> .config #阿里DDNS
         echo "CONFIG_FIRMWARE_INCLUDE_ZEROTIER=n" >> .config #zerotier ~1.3M
-        echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLAREDDNS=n" >> .config #CLOUDFLAREDDNS
+        echo "CONFIG_FIRMWARE_INCLUDE_CLOUDFLAREDDNS=y" >> .config #CLOUDFLAREDDNS
         echo "CONFIG_FIRMWARE_INCLUDE_NVPPROXY=n" >> .config #NVPPROXY
         echo "CONFIG_FIRMWARE_INCLUDE_DDNSTO=n" >> .config #DDNSTO
         echo "CONFIG_FIRMWARE_INCLUDE_WIREGUARD=n" >> .config #WIREGUARD
         #
-        echo "CONFIG_FIRMWARE_INCLUDE_ALDRIVER=n" >> .config #阿里云盘
+        echo "CONFIG_FIRMWARE_INCLUDE_ALDRIVER=y" >> .config #阿里云盘
         #
         echo "CONFIG_FIRMWARE_INCLUDE_CADDY=n" >> .config #在线文件管理服务
         echo "CONFIG_FIRMWARE_INCLUDE_CADDYBIN=n" >> .config #集成caddu执行文件，此文件有13M,请注意固件大小。如果不集成，会从网上下载下来执行，不影响正常使用
@@ -230,7 +207,7 @@ jobs:
         age: '1 day'
         skip-recent: 5
     - name: PushPlus Notification
-      uses: vb1980/Action_PushPlus@master
+      uses: zlsdzh001/Action_PushPlus@master
       if: env.STATUS == 'success' && github.event.inputs.pushplus == 'true'
       with:
         token: ${{ secrets.PUSHTOKEN }}
