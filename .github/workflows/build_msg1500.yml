@@ -1,4 +1,4 @@
-name: Build BELL-A-040W-Q from vb1980 kvr repo
+name: Build MSG1500 Padavan-KVR image
 
 on: 
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       firmwarever:
         description: 'firmware''s version'
         required: true
-        default: '20201015'
+        default: '20231019'
       busyboxver:
         type: choice
         description: 'busybox''s version'
@@ -27,13 +27,13 @@ on:
         description: 'whether to notify through pushplus'
         default: 'false'
 env:
-  REPOSITORY_URL: https://github.com/vb1980/Padavan-KVR.git
+  REPOSITORY_URL: https://github.com/zlsdzh001/Padavan.git
   TOOLCHAIN_URL: https://github.com/hanwckf/padavan-toolchain/releases/download/v1.1/mipsel-linux-uclibc.tar.xz
   WORK_PATH: /opt/rt-n56u
   TIME_ZONE: Asia/Shanghai
-  TARGET_NAME: BELL-A-040W-Q
+  TARGET_NAME: MSG1500
   FIRMWARE_DATEPREFIX: $(date +"%Y%m%d")
-  FIRMWARE_AUTHOR: vb1980
+  FIRMWARE_AUTHOR: zuols
   FIRMWARE_PATH: /opt/firmwares
 jobs:
   build:
