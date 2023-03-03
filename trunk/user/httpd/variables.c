@@ -748,9 +748,9 @@
 			{"ddns2_user", "", NULL, EVM_RESTART_DDNS },
 			{"ddns2_pass", "", NULL, EVM_RESTART_DDNS },
 #if defined(APP_ALIDDNS)
-            {"aliddns_enable", "", NULL, EVM_RESTART_ALIDDNS },
+      {"aliddns_enable", "", NULL, EVM_RESTART_ALIDDNS },
 			{"aliddns_interval", "", NULL, EVM_RESTART_ALIDDNS },
-            {"aliddns_ttl", "", NULL, EVM_RESTART_ALIDDNS },
+      {"aliddns_ttl", "", NULL, EVM_RESTART_ALIDDNS },
 			{"aliddns_ak", "", NULL, EVM_RESTART_ALIDDNS },
 			{"aliddns_sk", "", NULL, EVM_RESTART_ALIDDNS },
 			{"aliddns_name", "", NULL, EVM_RESTART_ALIDDNS },
